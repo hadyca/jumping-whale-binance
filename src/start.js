@@ -1,6 +1,7 @@
 import getCandle from "./api/getCandle";
 import getClosingPrice from "./utils/reverse_closing";
 import calculateRsi from "./utils/calculateRsi";
+import cctxCandle from "./api/cctxCandle";
 
 export default async function start(req, res, next) {
   const INTERVAL_TYPE = {
@@ -28,13 +29,16 @@ export default async function start(req, res, next) {
   const COIN_NAME = "BTC";
 
   //candle값 가져오기
+  // const candleData = await cctxCandle();
   const candleData = await getCandle(SYMBOL, INTERVAL);
+  // console.log(candleData);
   // 200개 종가 배열 [과거->최신순]
   const closingPriceArr = getClosingPrice(candleData);
 
   //rsi값 추출
   const rsiData = calculateRsi(closingPriceArr);
   console.log(rsiData);
+  res.send(rsiData);
   // 가져온 rsi값으로 매매하기
   // const finalResult = await trading({
   //   coinName: COIN_NAME,
@@ -51,5 +55,4 @@ export default async function start(req, res, next) {
   //   console.log("🎉 트레이딩 완료!");
   //   next();
   // }
-  next();
 }
