@@ -2,7 +2,7 @@ require("dotenv").config();
 import fetch from "node-fetch";
 const crypto = require("crypto");
 
-export default async function getAccount(req, res) {
+export default async function getAccount() {
   try {
     const API_KEY = process.env.BINANCE_OPEN_API_ACCESS_KEY;
     const API_SECRET = process.env.BINANCE_OPEN_API_SECRET_KEY;
@@ -28,9 +28,10 @@ export default async function getAccount(req, res) {
       });
 
       const result = await response.json();
-      return res.send(result);
+      console.log(result);
     } catch (error) {
-      console.error("Error fetching futures account:", error);
+      console.error("바이낸스 계정조회 fetch 에러: ", error);
+      return await getAccount();
     }
 
     // const endpoint = "https://fapi.binance.com/fapi/v2/account";
