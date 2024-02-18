@@ -2,10 +2,10 @@ require("dotenv").config();
 import fetch from "node-fetch";
 const crypto = require("crypto");
 
-export default async function getAccount() {
+export default async function order(time) {
   const API_KEY = process.env.BINANCE_OPEN_API_ACCESS_KEY;
   const API_SECRET = process.env.BINANCE_OPEN_API_SECRET_KEY;
-  const timestamp = () => new Date().getTime();
+  //   const timestamp = () => new Date().getTime();
 
   const generateSignature = (queryString) => {
     return crypto
@@ -13,17 +13,17 @@ export default async function getAccount() {
       .update(queryString)
       .digest("hex");
   };
-  const timestampNow = timestamp();
-  const queryString = `timestamp=${timestampNow}`;
+  const timestampNow = time;
+  const queryString = `symbol=BTCUSDT&side=SELL&type=LIMIT&timeInForce=GTC&quantity=0.004&price=60000&timestamp=${time}`;
   const signature = generateSignature(queryString);
 
   const BASE_URL = "https://fapi.binance.com";
-  const PATH = "/fapi/v2/account";
+  const PATH = "/fapi/v1/order";
   const PARAMS = `?${queryString}&signature=${signature}`;
 
   const url = `${BASE_URL}${PATH}${PARAMS}`;
   const options = {
-    method: "GET",
+    method: "POST",
     headers: {
       "X-MBX-APIKEY": API_KEY,
     },
@@ -34,7 +34,7 @@ export default async function getAccount() {
     console.log(result);
     return result;
   } catch (error) {
-    console.log("바이낸스 account fetch에러:", error);
+    console.error("바이낸스 주문 fetch 에러: ", error);
     throw error;
   }
 }

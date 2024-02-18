@@ -1,6 +1,8 @@
 import getCandle from "./api/getCandle";
 import getClosingPrice from "./utils/reverse_closing";
 import calculateRsi from "./utils/calculateRsi";
+import order from "./api/order";
+import getTime from "./api/getTime";
 
 export default async function start() {
   const INTERVAL_TYPE = {
@@ -36,7 +38,8 @@ export default async function start() {
   //rsi값 추출
   const rsiData = calculateRsi(closingPriceArr);
   console.log(rsiData);
-
+  const { serverTime } = await getTime();
+  const orderData = await order(serverTime);
   // 가져온 rsi값으로 매매하기
   // const finalResult = await trading({
   //   coinName: COIN_NAME,
