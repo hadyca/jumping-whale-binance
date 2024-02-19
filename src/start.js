@@ -1,8 +1,10 @@
 import getCandle from "./api/getCandle";
 import getClosingPrice from "./utils/reverse_closing";
 import calculateRsi from "./utils/calculateRsi";
-import order from "./api/order";
 import getTime from "./api/getTime";
+import trading from "./utils/trading";
+import getOrderBook from "./api/orderBook";
+import getBalance from "./api/balance";
 
 export default async function start() {
   const INTERVAL_TYPE = {
@@ -39,16 +41,16 @@ export default async function start() {
   const rsiData = calculateRsi(closingPriceArr);
   console.log(rsiData);
   const { serverTime } = await getTime();
-  const orderData = await order(serverTime);
+  const test = await getBalance(serverTime);
   // 가져온 rsi값으로 매매하기
-  // const finalResult = await trading({
-  //   coinName: COIN_NAME,
-  //   coin_pay: COIN_PAY,
-  //   beforeRsi: rsiData.beforeRsi,
-  //   nowRsi: rsiData.nowRsi,
-  //   setRowRsi: SET_ROW_RSI,
-  //   setHighRsi: SET_HIGH_RSI,
-  // });
+  const finalResult = await trading({
+    symbol: SYMBOL,
+    beforeRsi: rsiData.beforeRsi,
+    nowRsi: rsiData.nowRsi,
+    setRowRsi: SET_ROW_RSI,
+    setHighRsi: SET_HIGH_RSI,
+    serverTime: serverTime,
+  });
 
   // if (finalResult === undefined) {
   //   setTimeout(start, 1000);
