@@ -2,7 +2,7 @@ require("dotenv").config();
 import fetch from "node-fetch";
 const crypto = require("crypto");
 
-export default async function getAccount(req, res) {
+export default async function getAccount() {
   try {
     const API_KEY = process.env.BINANCE_OPEN_API_ACCESS_KEY;
     const API_SECRET = process.env.BINANCE_OPEN_API_SECRET_KEY;
