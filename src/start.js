@@ -26,7 +26,7 @@ export default async function start() {
   };
 
   const SYMBOL = "BTCUSDT";
-  const INTERVAL = INTERVAL_TYPE["5m"];
+  const INTERVAL = INTERVAL_TYPE["30m"];
   const SET_ROW_RSI = 30;
   const SET_HIGH_RSI = 70;
   const COIN_NAME = "BTC";
@@ -39,9 +39,7 @@ export default async function start() {
 
   //rsi값 추출
   const rsiData = calculateRsi(closingPriceArr);
-  console.log(rsiData);
   const { serverTime } = await getTime();
-  const test = await getBalance(serverTime);
   // 가져온 rsi값으로 매매하기
   const finalResult = await trading({
     symbol: SYMBOL,
@@ -51,11 +49,9 @@ export default async function start() {
     setHighRsi: SET_HIGH_RSI,
     serverTime: serverTime,
   });
-
-  // if (finalResult === undefined) {
-  //   setTimeout(start, 1000);
-  // } else {
-  //   console.log("🎉 트레이딩 완료!");
-  //   next();
-  // }
+  if (finalResult === undefined) {
+    setTimeout(start, 1000);
+  } else {
+    console.log("🎉 트레이딩 완료!");
+  }
 }

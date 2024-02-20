@@ -34,7 +34,7 @@ export default async function limitBuy(symbol, qty, price, serverTime) {
     console.log(result);
     return result;
   } catch (error) {
-    console.error("바이낸스 주문 fetch 에러: ", error);
+    console.error("바이낸스 지정가매수 fetch 에러: ", error);
     throw error;
   }
 }

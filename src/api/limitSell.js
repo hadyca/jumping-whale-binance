@@ -2,7 +2,7 @@ require("dotenv").config();
 import fetch from "node-fetch";
 const crypto = require("crypto");
 
-export default async function order(time) {
+export default async function limitSell(symbol, qty, sellPrice, serverTime) {
   const API_KEY = process.env.BINANCE_OPEN_API_ACCESS_KEY;
   const API_SECRET = process.env.BINANCE_OPEN_API_SECRET_KEY;
   //   const timestamp = () => new Date().getTime();
@@ -13,8 +13,8 @@ export default async function order(time) {
       .update(queryString)
       .digest("hex");
   };
-  // const timestampNow = time;
-  const queryString = `symbol=BTCUSDT&side=SELL&type=LIMIT&timeInForce=GTC&quantity=0.004&price=60000&timestamp=${time}`;
+  // const timestampNow = serverTime;
+  const queryString = `symbol=${symbol}&side=SELL&type=LIMIT&timeInForce=GTC&quantity=${qty}&price=${sellPrice}&timestamp=${serverTime}`;
   const signature = generateSignature(queryString);
 
   const BASE_URL = "https://fapi.binance.com";
@@ -34,7 +34,7 @@ export default async function order(time) {
     console.log(result);
     return result;
   } catch (error) {
-    console.error("바이낸스 주문 fetch 에러: ", error);
+    console.error("바이낸스 지정가매도 fetch 에러: ", error);
     throw error;
   }
 }
