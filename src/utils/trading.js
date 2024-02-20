@@ -20,6 +20,7 @@ export default async function trading({
   ) {
     // 매수1호가 가져오기
     const buyPrice = await getBestOrderBook(symbol);
+
     //내가 가진 USDT (1배수 기준임, 레버리지 할거면 레버리지 수만큼 곱하면됨)
     const availableUSDT = await getBalance(serverTime);
 
