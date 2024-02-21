@@ -1,12 +1,12 @@
 require("dotenv").config();
 import fetch from "node-fetch";
 
-export default async function getCandle(symbol, interval) {
+export default async function getOrderBook(symbol) {
   const API_KEY = process.env.BINANCE_OPEN_API_ACCESS_KEY;
 
   const BASE_URL = "https://fapi.binance.com";
-  const PATH = "/fapi/v1/klines";
-  const PARAMS = `?symbol=${symbol}&interval=${interval}&limit=200`;
+  const PATH = "/fapi/v1/depth";
+  const PARAMS = `?symbol=${symbol}&limit=5`;
 
   const url = `${BASE_URL}${PATH}${PARAMS}`;
   const options = {
@@ -18,9 +18,10 @@ export default async function getCandle(symbol, interval) {
   try {
     const res = await fetch(url, options);
     const result = await res.json();
-    return result;
+    console.log(parseFloat(result.bids[0][0]));
+    return parseFloat(result.bids[0][0]);
   } catch (error) {
-    console.log("바이낸스 캔들값 fetch에러:", error);
-    return await getCandle(symbol, interval);
+    console.log("바이낸스 오더북 fetch에러:", error);
+    throw error;
   }
 }

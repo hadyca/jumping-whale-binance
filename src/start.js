@@ -1,9 +1,12 @@
 import getCandle from "./api/getCandle";
 import getClosingPrice from "./utils/reverse_closing";
 import calculateRsi from "./utils/calculateRsi";
-import getAccount from "./api/getAccount";
+import getTime from "./api/getTime";
+import trading from "./utils/trading";
+import getOrderBook from "./api/orderBook";
+import getBalance from "./api/balance";
 
-export default async function start(req, res, next) {
+export default async function start() {
   const INTERVAL_TYPE = {
     "1m": "1m",
     "3m": "3m",
@@ -23,35 +26,30 @@ export default async function start(req, res, next) {
   };
 
   const SYMBOL = "BTCUSDT";
-  const INTERVAL = INTERVAL_TYPE["5m"];
+  const INTERVAL = INTERVAL_TYPE["1h"];
   const SET_ROW_RSI = 30;
   const SET_HIGH_RSI = 70;
-  const COIN_NAME = "BTC";
 
   //candle값 가져오기
+  // const candleData = await cctxCandle();
   const candleData = await getCandle(SYMBOL, INTERVAL);
   // 200개 종가 배열 [과거->최신순]
   const closingPriceArr = getClosingPrice(candleData);
   //rsi값 추출
   const rsiData = calculateRsi(closingPriceArr);
-
-  const account = await getAccount();
-  console.log(account);
+  const { serverTime } = await getTime();
   // 가져온 rsi값으로 매매하기
-  // const finalResult = await trading({
-  //   coinName: COIN_NAME,
-  //   coin_pay: COIN_PAY,
-  //   beforeRsi: rsiData.beforeRsi,
-  //   nowRsi: rsiData.nowRsi,
-  //   setRowRsi: SET_ROW_RSI,
-  //   setHighRsi: SET_HIGH_RSI,
-  // });
-
-  // if (finalResult === undefined) {
-  //   setTimeout(start, 1000);
-  // } else {
-  //   console.log("🎉 트레이딩 완료!");
-  //   next();
-  // }
-  next();
+  const finalResult = await trading({
+    symbol: SYMBOL,
+    beforeRsi: rsiData.beforeRsi,
+    nowRsi: rsiData.nowRsi,
+    setRowRsi: SET_ROW_RSI,
+    setHighRsi: SET_HIGH_RSI,
+    serverTime: serverTime,
+  });
+  if (finalResult === undefined) {
+    setTimeout(start, 1000);
+  } else {
+    console.log("🎉 트레이딩 완료!");
+  }
 }

@@ -5,6 +5,9 @@ import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import getCandle from "./api/getCandle";
 import start from "./start";
+import getAccount from "./api/getAccount";
+import getOrderBook from "./api/orderBook";
+import getBestOrderBook from "./api/bookTicker";
 const app = express();
 
 // const handleHome = (req, res) => res.send("시작합니다~");
@@ -17,7 +20,10 @@ const app = express();
 // app.use(helmet());
 app.use(morgan("dev"));
 
-app.get("/", start);
+app.get("/", (req, res) => {
+  start();
+  res.send("성공!");
+});
 // app.use(binance);
 
 // app.get("/profile", handleProfile);
