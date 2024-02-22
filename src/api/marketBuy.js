@@ -14,7 +14,7 @@ export default async function marketBuy(symbol, qty, serverTime) {
       .digest("hex");
   };
   // const timestampNow = serverTime;
-  const queryString = `symbol=${symbol}&side=BUY&type=MARKET&timeInForce=GTC&quantity=${qty}&timestamp=${serverTime}`;
+  const queryString = `symbol=${symbol}&side=BUY&type=MARKET&quantity=${qty}&timestamp=${serverTime}`;
   const signature = generateSignature(queryString);
 
   const BASE_URL = "https://fapi.binance.com";
