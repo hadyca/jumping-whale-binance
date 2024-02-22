@@ -34,7 +34,7 @@ export default async function limitSell(symbol, qty, sellPrice, serverTime) {
     console.log(result);
     return result;
   } catch (error) {
-    console.error("바이낸스 지정가매도 fetch 에러: ", error);
+    console.error("바이낸스 지정가 매도 fetch 에러: ", error);
     throw error;
   }
 }

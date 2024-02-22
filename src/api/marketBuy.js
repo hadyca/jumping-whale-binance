@@ -2,7 +2,7 @@ require("dotenv").config();
 import fetch from "node-fetch";
 const crypto = require("crypto");
 
-export default async function limitBuy(symbol, qty, price, serverTime) {
+export default async function marketBuy(symbol, qty, serverTime) {
   const API_KEY = process.env.BINANCE_OPEN_API_ACCESS_KEY;
   const API_SECRET = process.env.BINANCE_OPEN_API_SECRET_KEY;
   //   const timestamp = () => new Date().getTime();
@@ -14,7 +14,7 @@ export default async function limitBuy(symbol, qty, price, serverTime) {
       .digest("hex");
   };
   // const timestampNow = serverTime;
-  const queryString = `symbol=${symbol}&side=BUY&type=LIMIT&timeInForce=GTC&quantity=${qty}&price=${price}&timestamp=${serverTime}`;
+  const queryString = `symbol=${symbol}&side=BUY&type=MARKET&timeInForce=GTC&quantity=${qty}&timestamp=${serverTime}`;
   const signature = generateSignature(queryString);
 
   const BASE_URL = "https://fapi.binance.com";
@@ -34,7 +34,7 @@ export default async function limitBuy(symbol, qty, price, serverTime) {
     console.log(result);
     return result;
   } catch (error) {
-    console.error("바이낸스 지정가 매수 fetch 에러: ", error);
+    console.error("바이낸스 시장가 매수 fetch 에러: ", error);
     throw error;
   }
 }
