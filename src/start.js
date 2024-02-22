@@ -26,7 +26,7 @@ export default async function start() {
   };
 
   const SYMBOL = "BTCUSDT";
-  const INTERVAL = INTERVAL_TYPE["1h"];
+  const INTERVAL = INTERVAL_TYPE["5m"];
   const SET_ROW_RSI = 30;
   const SET_HIGH_RSI = 70;
 
