@@ -25,7 +25,7 @@ export default async function trading({
 
     //내가 가진 USDT (1배수 기준임, 레버리지 할거면 레버리지 수만큼 곱하면됨)
     const availableUSDT = await getBalance(serverTime);
-    const leverage = 100;
+    const leverage = 50;
     const availableBuyVolume = (availableUSDT * leverage) / buyPrice;
     const threeDecimalBuyVolume = String(
       Math.floor(availableBuyVolume * 1000) / 1000
